@@ -441,7 +441,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -3000}
+  m_AnchoredPosition: {x: 0, y: -3100}
   m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1082740232
@@ -468,30 +468,33 @@ MonoBehaviour:
 
     <align=center><size=30>ES@P 2026</size>
 
-    <size=50>Holo-Adapt</size></align>
+    <size=50>Holo-Adapt</size>
 
 
-    TESTTESTETSTETETSTETSTETETS
+    Project
+    Manager
+
+    Neal Singh
 
 
-    It
-    is a period of civil wars in the galaxy. A brave alliance of underground freedom
-    fighters has challenged the tyranny and oppression of the awesome GALACTIC EMPIRE.
+    Animations
+
+    Jackson Dees
+
+    Logan Lim
+
+    Asmi
+    Rudra
 
 
 
-    Striking
-    from a fortress hidden among the billion stars of the galaxy, rebel spaceships
-    have won their first victory in a battle with the powerful Imperial Starfleet.
-    The EMPIRE fears that another defeat could bring a thousand more solar systems
-    into the rebellion, and Imperial control over the galaxy would be lost forever.
 
 
 
-    To
-    crush the rebellion once and for all, the EMPIRE is constructing a sinister new
-    battle station. Powerful enough to destroy an entire planet, its completion spells
-    certain doom for the champions of freedom.'
+
+    To crush the rebellion once and for all, the EMPIRE is constructing
+    a sinister new battle station. Powerful enough to destroy an entire planet, its
+    completion spells certain doom for the champions of freedom.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3d8971a6d798f2548bd0ea1e2c5293ac, type: 2}
   m_sharedMaterial: {fileID: -6424038201695467044, guid: 3d8971a6d798f2548bd0ea1e2c5293ac, type: 2}
