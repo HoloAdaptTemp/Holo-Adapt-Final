@@ -464,37 +464,42 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '
-
-    <align=center><size=30>ES@P 2026</size>
+  m_text: '<align=center><size=30>ES@P 2026</size>
 
     <size=50>Holo-Adapt</size></align>
 
 
     Project
-    Manager
-
-    Neal Singh
+    Manager: Neal Singh
 
 
-    Animations
+    Mechanical Subteam Leads: Loick Trampont, David Schwartzman
 
-    Jackson Dees
 
-    Logan Lim
+    Controls
+    Subteam Lead: Connor Martin
 
-    Asmi
+
+    Animations Subteam Lead: Jackson Dees
+
+
+    Mechanical
+    Team: Truman "The Fat Hog" Parrish, Jess Fetter, Olin Dawson
+
+
+    Controls Team:
+    Astha Patel, Liam Watson, Anthony Colby
+
+
+    Animations Team: Logan Lim, Asmi
     Rudra
 
 
+    OLED TV Donor: Keith Rice
 
 
 
-
-
-    To crush the rebellion once and for all, the EMPIRE is constructing
-    a sinister new battle station. Powerful enough to destroy an entire planet, its
-    completion spells certain doom for the champions of freedom.'
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3d8971a6d798f2548bd0ea1e2c5293ac, type: 2}
   m_sharedMaterial: {fileID: -6424038201695467044, guid: 3d8971a6d798f2548bd0ea1e2c5293ac, type: 2}
