@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class BounceAndSpin : MonoBehaviour
 {
-    public Vector2 velocity = new Vector2(2f, 1f);   // movement speed
-    public float xLimit = 24f;                        // horizontal boundary
-    public float yLimit = 13.5f;                      // vertical boundary
-    public float rotationSpeed = 30f;                // spin speed (deg/sec)
+    public Vector2 velocity = new Vector2(1f, .5f);   // movement speed
+    public float xLimit = 15f;                        // horizontal boundary
+    public float yLimit = 5f;                      // vertical boundary
+    public float rotationSpeed = 20f;                // spin speed (deg/sec)
 
     void Update()
     {
