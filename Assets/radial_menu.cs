@@ -23,7 +23,7 @@ public class RadialMenuController : MonoBehaviour
         "",
         "holoadapt_opening",
         "ES@P",
-        "hand_anim",
+        "SampleScene",
         "RealStarsSkyboxFreeAsset",
         "engine"
     };

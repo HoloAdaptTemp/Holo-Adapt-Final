@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/holoadapt_opening.unity
     guid: 347b0dc44a0f571408c3abb86741e49d
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/hand_anim.unity
     guid: 65a54e26ede1f8b408ea2249f3e89e6d
   - enabled: 1
@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/engine.unity
     guid: 4ce338ce7a4f3f847bfb05983922bbc2
+  - enabled: 1
+    path: Assets/Scenes/SampleScene.unity
+    guid: 34245eb8c8231664dadc41d3a46763f0
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

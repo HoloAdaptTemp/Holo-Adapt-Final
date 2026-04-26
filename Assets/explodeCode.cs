@@ -6,10 +6,9 @@ public class ExplodedViewScroll : MonoBehaviour
     [Range(0f, 1f)]
     public float explodeAmount = 0f;
 
-    public float explodeSpeed = 0.05f;   // slower, smoother scroll
     public float scaleFactor = 0.2f;
 
-    public Transform originPiece; // assign Oil_pan-1 here
+    public Transform originPiece; // Oil_pan-1
 
     private Transform[] parts;
     private Vector3[] initialLocalPositions;
@@ -27,17 +26,16 @@ public class ExplodedViewScroll : MonoBehaviour
 
         for (int i = 0; i < parts.Length; i++)
         {
-            Transform t = parts[i];
-            initialLocalPositions[i] = t.localPosition;
+            initialLocalPositions[i] = parts[i].localPosition;
         }
     }
 
     void Update()
     {
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (websocket.Instance == null) return;
 
-        explodeAmount += scroll * explodeSpeed;
-        explodeAmount = Mathf.Clamp01(explodeAmount);
+        // Use glove flex directly (0 = closed, 1 = open)
+        explodeAmount = Mathf.Clamp01(websocket.Instance.GloveFlex1);
 
         ApplyExplosion();
     }
@@ -50,10 +48,10 @@ public class ExplodedViewScroll : MonoBehaviour
         {
             Transform t = parts[i];
 
-            if (t == transform) continue;         // skip root
-            if (t == originPiece) continue;       // KEEP OIL PAN FIXED
+            if (t == transform) continue;
+            if (t == originPiece) continue;
 
-            Vector3 dir = (initialLocalPositions[i] - origin);
+            Vector3 dir = initialLocalPositions[i] - origin;
             float dist = dir.magnitude;
 
             if (dist < 0.0001f) continue;
