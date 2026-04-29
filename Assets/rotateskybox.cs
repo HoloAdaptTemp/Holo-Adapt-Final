@@ -10,6 +10,24 @@ public class SkyRotationAdvanced : MonoBehaviour
 
     private Vector3 celestialAxis;
 
+    // Extract signed twist angle (in degrees) around a local axis from a quaternion.
+    private static float ExtractSignedTwistAngle(Quaternion rotation, Vector3 localAxis)
+    {
+        Vector3 axis = localAxis.normalized;
+
+        // Keep only quaternion vector part aligned to the target axis.
+        Vector3 qVec = new Vector3(rotation.x, rotation.y, rotation.z);
+        Vector3 projected = Vector3.Project(qVec, axis);
+
+        Quaternion twist = new Quaternion(projected.x, projected.y, projected.z, rotation.w).normalized;
+        twist.ToAngleAxis(out float angle, out Vector3 twistAxis);
+
+        if (angle > 180f) angle -= 360f;
+
+        float sign = Mathf.Sign(Vector3.Dot(twistAxis, axis));
+        return angle * sign;
+    }
+
     void Start()
     {
         float latRad = latitude * Mathf.Deg2Rad;
@@ -35,28 +53,9 @@ public class SkyRotationAdvanced : MonoBehaviour
 
         if (flex < 0.5f)
         {
-            // Get axis-angle from delta
-            delta.ToAngleAxis(out float angle, out Vector3 axis);
-
-            // Ensure axis is meaningful
-            if (angle > 180f) angle -= 360f;
-
-            // Determine roll sign relative to glove forward direction
-            Vector3 gloveForward = delta * Vector3.forward;
-
-            // Project onto plane perpendicular to sky axis
-            Vector3 projected = Vector3.ProjectOnPlane(gloveForward, celestialAxis).normalized;
-
-            // Reference direction to define sign
-            Vector3 refDir = Vector3.Cross(celestialAxis, Vector3.up);
-            if (refDir.sqrMagnitude < 0.01f)
-                refDir = Vector3.Cross(celestialAxis, Vector3.right);
-
-            float sign = Mathf.Sign(Vector3.Dot(projected, refDir));
-
-            float signedAngle = angle * sign;
-
-            transform.rotation = Quaternion.AngleAxis(signedAngle, celestialAxis) * transform.rotation;
+            // Only use glove roll (twist about local forward), preserving direction.
+            float signedRoll = ExtractSignedTwistAngle(delta, Vector3.forward);
+            transform.rotation = Quaternion.AngleAxis(signedRoll, celestialAxis) * transform.rotation;
         }
     }
 }

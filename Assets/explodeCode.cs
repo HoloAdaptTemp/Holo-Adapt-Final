@@ -7,14 +7,18 @@ public class ExplodedViewScroll : MonoBehaviour
     public float explodeAmount = 0f;
 
     public float scaleFactor = 0.2f;
+    public float enlargeMultiplier = 2f;
 
     public Transform originPiece; // Oil_pan-1
 
     private Transform[] parts;
     private Vector3[] initialLocalPositions;
+    private Vector3 initialRootScale;
 
     void Start()
     {
+        initialRootScale = transform.localScale;
+
         if (originPiece == null)
         {
             Debug.LogError("Assign Oil_pan-1 as originPiece in Inspector!");
@@ -36,6 +40,11 @@ public class ExplodedViewScroll : MonoBehaviour
 
         // Use glove flex directly (0 = closed, 1 = open)
         explodeAmount = Mathf.Clamp01(websocket.Instance.GloveFlex2);
+
+        bool isButton2Pressed = websocket.Instance.GloveButton2;
+        transform.localScale = isButton2Pressed
+            ? initialRootScale * enlargeMultiplier
+            : initialRootScale;
 
         ApplyExplosion();
     }

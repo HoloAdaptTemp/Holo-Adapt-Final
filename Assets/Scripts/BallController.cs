@@ -5,22 +5,25 @@ public class BallController : MonoBehaviour
 {
     private Rigidbody rb;
     private bool isResetting = false;
+    private bool wasButton2Pressed = false;
+    private Quaternion initialMazeLocalRotation;
+    private bool hasInitialMazeRotation = false;
 
     [Header("Maze Reference")]
-    public Transform mazeTransform; 
+    public Transform mazeTransform;
 
     [Header("Reset Settings")]
     public float waitTime = 0.1f;
-    public float fallThreshold = -1.0f; 
+    public float fallThreshold = -1.0f;
     public float xRst = -8f;
     public float zRst = 5f;
     public float yRst = 2f; // Height above the maze floor
 
     [Header("Jump Settings")]
     public float jumpForce = 5f;
-    public float flexThreshold = 0.7f; 
-    private bool canJump = true; 
-    
+    public float flexThreshold = 0.7f;
+    private bool canJump = true;
+
     [Header("Win Text")]
     public GameObject winTextObject;
 
@@ -36,24 +39,18 @@ public class BallController : MonoBehaviour
         {
             mazeTransform = transform.parent;
         }
+
+        if (mazeTransform != null)
+        {
+            initialMazeLocalRotation = mazeTransform.localRotation;
+            hasInitialMazeRotation = true;
+        }
     }
 
     void Update()
     {
         HandleJump();
-    }
-
-    void LateUpdate()
-    {
-        if (mazeTransform == null) return;
-
-        // Convert world position to local space to check if it's "below" the maze floor
-        Vector3 localPos = mazeTransform.InverseTransformPoint(transform.position);
-
-        if (localPos.y < fallThreshold && !isResetting)
-        {
-            StartCoroutine(ResetBallRoutine());
-        }
+        HandleManualReset();
     }
 
     private void HandleJump()
@@ -67,6 +64,25 @@ public class BallController : MonoBehaviour
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             StartCoroutine(JumpCooldown());
         }
+    }
+
+    private void HandleManualReset()
+    {
+        if (websocket.Instance == null)
+        {
+            wasButton2Pressed = false;
+            return;
+        }
+
+        bool isButton2Pressed = websocket.Instance.GloveButton2;
+
+        // Trigger reset only on button-down edge, not while held.
+        if (isButton2Pressed && !wasButton2Pressed && !isResetting)
+        {
+            StartCoroutine(ResetBallRoutine());
+        }
+
+        wasButton2Pressed = isButton2Pressed;
     }
 
     private bool IsGrounded()
@@ -88,12 +104,17 @@ public class BallController : MonoBehaviour
 
         if (mazeTransform != null)
         {
+            if (hasInitialMazeRotation)
+            {
+                mazeTransform.localRotation = initialMazeLocalRotation;
+            }
+
             // Define the local spawn point
             Vector3 localRst = new Vector3(xRst, yRst, zRst);
-            
+
             // Convert that local point to a World Position based on the Maze's current rotation/pos
             transform.position = mazeTransform.TransformPoint(localRst);
-            
+
             // Reset physical forces
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
@@ -102,9 +123,9 @@ public class BallController : MonoBehaviour
         isResetting = false;
     }
 
-    void OnTriggerEnter(Collider other) 
+    void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Star")) 
+        if (other.gameObject.CompareTag("Star"))
         {
             other.gameObject.SetActive(false);
             if (winTextObject != null) winTextObject.SetActive(true);

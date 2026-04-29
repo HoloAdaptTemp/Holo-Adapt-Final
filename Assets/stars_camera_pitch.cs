@@ -20,7 +20,7 @@ public class StarsCameraPitch : MonoBehaviour
             if (forward.sqrMagnitude > 0.0001f)
             {
                 Quaternion pitchOnly = Quaternion.LookRotation(forward);
-                transform.rotation *= pitchOnly;
+                transform.rotation *= Quaternion.Inverse(pitchOnly);
             }
         }
     }
