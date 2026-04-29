@@ -602,7 +602,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkyRotationAdvanced
   latitude: 40.25
-  rotationSpeed: 5
   polaris: {fileID: 935337441}
 --- !u!114 &70734029
 MonoBehaviour:
@@ -1279,11 +1278,11 @@ MonoBehaviour:
   mainSceneSwitcher: 0
   optionLabels:
   - Cancel
-  - Scene 1
-  - Scene 2
-  - Scene 3
-  - Scene 4
-  - Scene 5
+  - Star Wars
+  - Logo
+  - Maze
+  - Stars
+  - Engine
   radius: 150
   radialMenuIsActive: 0
 --- !u!1 &544096460
@@ -1414,11 +1413,11 @@ MonoBehaviour:
   mainSceneSwitcher: 0
   optionLabels:
   - Cancel
-  - Scene 1
-  - Scene 2
-  - Scene 3
-  - Scene 4
-  - Scene 5
+  - Star Wars
+  - Logo
+  - Maze
+  - Stars
+  - Engine
   radius: 150
   radialMenuIsActive: 0
 --- !u!1 &727001276
@@ -1884,11 +1883,11 @@ MonoBehaviour:
   mainSceneSwitcher: 1
   optionLabels:
   - Cancel
-  - Scene 1
-  - Scene 2
-  - Scene 3
-  - Scene 4
-  - Scene 5
+  - Star Wars
+  - Logo
+  - Maze
+  - Stars
+  - Engine
   radius: 150
   radialMenuIsActive: 0
 --- !u!1 &1311816812
@@ -2421,11 +2420,11 @@ MonoBehaviour:
   mainSceneSwitcher: 0
   optionLabels:
   - Cancel
-  - Scene 1
-  - Scene 2
-  - Scene 3
-  - Scene 4
-  - Scene 5
+  - Star Wars
+  - Logo
+  - Maze
+  - Stars
+  - Engine
   radius: 150
   radialMenuIsActive: 0
 --- !u!1 &1626733317

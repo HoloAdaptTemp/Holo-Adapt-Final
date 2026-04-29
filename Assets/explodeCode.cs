@@ -35,7 +35,7 @@ public class ExplodedViewScroll : MonoBehaviour
         if (websocket.Instance == null) return;
 
         // Use glove flex directly (0 = closed, 1 = open)
-        explodeAmount = Mathf.Clamp01(websocket.Instance.GloveFlex1);
+        explodeAmount = Mathf.Clamp01(websocket.Instance.GloveFlex2);
 
         ApplyExplosion();
     }
