@@ -4,6 +4,7 @@ using UnityEngine;
 public class BallController : MonoBehaviour
 {
     private Rigidbody rb;
+    private Rigidbody mazeRb;
     private bool isResetting = false;
     private bool wasButton2Pressed = false;
     private Quaternion initialMazeLocalRotation;
@@ -42,6 +43,7 @@ public class BallController : MonoBehaviour
 
         if (mazeTransform != null)
         {
+            mazeRb = mazeTransform.GetComponent<Rigidbody>();
             initialMazeLocalRotation = mazeTransform.localRotation;
             hasInitialMazeRotation = true;
         }
@@ -106,18 +108,32 @@ public class BallController : MonoBehaviour
         {
             if (hasInitialMazeRotation)
             {
-                mazeTransform.localRotation = initialMazeLocalRotation;
+                if (mazeRb != null)
+                {
+                    mazeRb.linearVelocity = Vector3.zero;
+                    mazeRb.angularVelocity = Vector3.zero;
+                    mazeRb.rotation = mazeTransform.parent != null
+                        ? mazeTransform.parent.rotation * initialMazeLocalRotation
+                        : initialMazeLocalRotation;
+                }
+                else
+                {
+                    mazeTransform.localRotation = initialMazeLocalRotation;
+                }
+
+                Physics.SyncTransforms();
             }
 
             // Define the local spawn point
             Vector3 localRst = new Vector3(xRst, yRst, zRst);
 
             // Convert that local point to a World Position based on the Maze's current rotation/pos
-            transform.position = mazeTransform.TransformPoint(localRst);
+            Vector3 worldRst = mazeTransform.TransformPoint(localRst);
 
             // Reset physical forces
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+            rb.position = worldRst;
         }
 
         isResetting = false;

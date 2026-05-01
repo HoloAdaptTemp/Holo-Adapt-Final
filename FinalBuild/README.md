@@ -1,7 +1,7 @@
 # Running
-1. Run `glove_websocket_data.py` after setting COM port to the correct one
-2. Run `Stars - HoloAdapt.exe`
-3. Must be done on a 1920x1200 display with screen mirroring to the TV
+1. Must be done on a 1920x1200 display with screen mirroring to the TV
+2. Run `glove_websocket_data.py` after setting COM port to the correct one
+3. Run `Stars - HoloAdapt.exe`
 
 # Scene Controls
 Press button 1 for radial menu and rotate to select scene
