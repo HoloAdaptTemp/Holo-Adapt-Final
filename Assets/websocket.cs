@@ -14,16 +14,18 @@ public class websocket : MonoBehaviour
     }
 
     private WebSocket _websocketClient;
-    private float prevPitchRaw;
-    private float prevRollRaw;
-    private float prevYawRaw;
+    private float prevPitchDeg;
+    private float prevRollDeg;
+    private float prevYawDeg;
+    private float unwrappedPitchDeg;
+    private float unwrappedRollDeg;
+    private float unwrappedYawDeg;
+    private bool hasPreviousRotation = false;
 
     // Bounds coming from the Python dummy generators:
-    // - rotations: [-PI, PI]
+    // - rotations: [-180, 180]
     // - accel:  [-(2^31), 2^31-1]
     // - flex:   [0.0, 1.0]
-    private const float ROT_MIN = 0f;
-    private const float ROT_MAX = 360f;
     private const float ACCEL_MIN = -100f;
     private const float ACCEL_MAX = 100f;
 
@@ -110,33 +112,47 @@ public class websocket : MonoBehaviour
             float.TryParse(parts[8], out float button1Raw);
             float.TryParse(parts[9], out float button2Raw);
 
-            // Map rotation values (Python sends radians in [0, 360]) to degrees [0,360)
-            float pitchDeg = Map(pitchRaw, ROT_MIN, ROT_MAX, 0f, 360f);
-            float rollDeg = Map(rollRaw, ROT_MIN, ROT_MAX, 0f, 360f);
-            float yawDeg = Map(yawRaw, ROT_MIN, ROT_MAX, 0f, 360f);
+            // Treat the IMU angles as wrapped degrees and unwrap them locally so the
+            // motion stays continuous across the +/-180 boundary.
+            float pitchDeg = pitchRaw;
+            float rollDeg = rollRaw;
+            float yawDeg = yawRaw;
 
-            // Compute previous mapped degrees for delta calculation
-            float prevPitchDeg = Map(prevPitchRaw, ROT_MIN, ROT_MAX, 0f, 360f);
-            float prevRollDeg = Map(prevRollRaw, ROT_MIN, ROT_MAX, 0f, 360f);
-            float prevYawDeg = Map(prevYawRaw, ROT_MIN, ROT_MAX, 0f, 360f);
+            if (!hasPreviousRotation)
+            {
+                prevPitchDeg = pitchDeg;
+                prevRollDeg = rollDeg;
+                prevYawDeg = yawDeg;
+                unwrappedPitchDeg = pitchDeg;
+                unwrappedRollDeg = rollDeg;
+                unwrappedYawDeg = yawDeg;
+                hasPreviousRotation = true;
+            }
 
+            float pitchDelta = Mathf.DeltaAngle(prevPitchDeg, pitchDeg);
+            float rollDelta = Mathf.DeltaAngle(prevRollDeg, rollDeg);
+            float yawDelta = Mathf.DeltaAngle(prevYawDeg, yawDeg);
+
+            unwrappedPitchDeg += pitchDelta;
+            unwrappedRollDeg += rollDelta;
+            unwrappedYawDeg += yawDelta;
 
             GloveRotation = Quaternion.Euler(
-                pitchDeg,
-                yawDeg,
-                rollDeg
+                unwrappedPitchDeg,
+                unwrappedYawDeg,
+                unwrappedRollDeg
             );
-            GloveRotationEuler = new Vector3(pitchDeg, yawDeg, rollDeg);
+            GloveRotationEuler = new Vector3(unwrappedPitchDeg, unwrappedYawDeg, unwrappedRollDeg);
 
             GloveRotationDelta = Quaternion.Euler(
-                pitchDeg - prevPitchDeg,
-                yawDeg - prevYawDeg,
-                rollDeg - prevRollDeg
+                pitchDelta,
+                yawDelta,
+                rollDelta
             );
             GloveRotationDeltaEuler = new Vector3(
-                pitchDeg - prevPitchDeg,
-                yawDeg - prevYawDeg,
-                rollDeg - prevRollDeg
+                pitchDelta,
+                yawDelta,
+                rollDelta
             );
 
             // Map rotation values (Python sends accel in [-100,100]) to [-100,100]
@@ -157,10 +173,10 @@ public class websocket : MonoBehaviour
             GloveButton1 = button1Raw > 0.5f;
             GloveButton2 = button2Raw > 0.5f;
 
-            // Save current raw values for next-delta calculation
-            prevPitchRaw = pitchRaw;
-            prevRollRaw = rollRaw;
-            prevYawRaw = yawRaw;
+            // Save current values for the next wrap-safe delta calculation
+            prevPitchDeg = pitchDeg;
+            prevRollDeg = rollDeg;
+            prevYawDeg = yawDeg;
 
             Debug.Log(
                 $"Roll: {GloveRotationEuler.z:F2}, " +

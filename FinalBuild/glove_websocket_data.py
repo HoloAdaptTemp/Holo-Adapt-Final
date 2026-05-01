@@ -105,9 +105,9 @@ async def global_update_loop(sensor):
     # Update sensor values from global variables at ~100 Hz
     interval = 0.01
     while True:
-        sensor.pitch = -roll/3
-        sensor.roll = pitch/3
-        sensor.yaw = -yaw/3
+        sensor.pitch = -roll
+        sensor.roll = pitch
+        sensor.yaw = -yaw
         sensor.accel_x = accel_x
         sensor.accel_y = accel_y
         sensor.accel_z = accel_z

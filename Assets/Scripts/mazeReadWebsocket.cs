@@ -5,6 +5,9 @@ public class MazeRawDelta : MonoBehaviour
 {
     private Rigidbody rb;
 
+    [Header("Rotation Damping")]
+    public float maxRotationSpeedDegreesPerFrame = 1f; // Max rotation angle per frame in degrees
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -16,7 +19,16 @@ public class MazeRawDelta : MonoBehaviour
 
         Quaternion delta = websocket.Instance.GloveRotationDelta;
 
-        Quaternion newRotation = rb.rotation * delta;
+        // Extract rotation angle and axis from the delta quaternion
+        delta.ToAngleAxis(out float angle, out Vector3 axis);
+
+        // Clamp the rotation angle to the maximum allowed per frame
+        angle = Mathf.Clamp(angle, -maxRotationSpeedDegreesPerFrame, maxRotationSpeedDegreesPerFrame);
+
+        // Reconstruct the clamped quaternion
+        Quaternion dampedDelta = Quaternion.AngleAxis(angle, axis);
+
+        Quaternion newRotation = rb.rotation * dampedDelta;
         rb.MoveRotation(newRotation);
     }
 }
